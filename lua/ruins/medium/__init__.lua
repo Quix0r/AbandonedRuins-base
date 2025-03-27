@@ -1,5 +1,6 @@
-local m_ruins = {}
+local ruins = {}
 
+-- Insert all ruins
 for _, ruin in pairs({
 	"assemblingLine",
 	"carAssembly",
@@ -34,7 +35,7 @@ for _, ruin in pairs({
 	"uraniumMining",
 	"walledSolar"
 }) do
-	table.insert(m_ruins, require("__AbandonedRuins20__/lua/ruins/medium/" .. ruin))
+	table.insert(ruins, require("__AbandonedRuins20__/lua/ruins/medium/" .. ruin))
 end
 
-return m_ruins
+return ruins

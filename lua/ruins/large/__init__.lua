@@ -1,5 +1,6 @@
-local l_ruins = {}
+local ruins = {}
 
+-- Insert all ruins
 for _, ruin in pairs({
 	"destroyedEnemyFort",
 	"destroyedFort",
@@ -20,7 +21,7 @@ for _, ruin in pairs({
 	"walledOrchard",
 	"walledGrotto"
 }) do
-	table.insert(l_ruins, require("__AbandonedRuins20__/lua/ruins/large/" .. ruin))
+	table.insert(ruins, require("__AbandonedRuins20__/lua/ruins/large/" .. ruin))
 end
 
-return l_ruins
+return ruins
