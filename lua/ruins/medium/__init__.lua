@@ -34,7 +34,7 @@ for _, ruin in pairs(
 	"uraniumMining",
 	"walledSolar"
 ) do
-	table.insert(m_ruins, require("__AbandonedRuins20__/lua/ruins/mediumRuins/" .. ruin))
+	table.insert(m_ruins, require("__AbandonedRuins20__/lua/ruins/medium/" .. ruin))
 end
 
 return m_ruins
