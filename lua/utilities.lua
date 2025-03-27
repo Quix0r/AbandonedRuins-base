@@ -52,7 +52,7 @@ util.safe_insert = base_util.insert_safe
 ---@param fluid_dict table<string, number> Dictionary of fluid names to amounts
 util.safe_insert_fluid = function(entity, fluid_dict)
   if not (entity and entity.valid and fluid_dict) then return end
-  local fluids = game.fluid_prototypes
+  local fluids = prototypes.fluid
   local insert = entity.insert_fluid
   for name, amount in pairs (fluid_dict) do
     if fluids[name] then
@@ -104,13 +104,13 @@ local function setup_enemy_force()
 
   util.set_enemy_force_diplomacy(enemy_force, false)
 
-  global.enemy_force = enemy_force
+  game.forces.enemy = enemy_force
   return enemy_force
 end
 
 util.get_enemy_force = function()
-  if (global.enemy_force and global.enemy_force.valid) then
-    return global.enemy_force
+  if (game.forces.enemy and game.forces.enemy.valid) then
+    return game.forces.enemy
   end
   return setup_enemy_force()
 end

@@ -1,5 +1,5 @@
-local util = require("__AbandonedRuins__/utilities")
-local spawning = require("__AbandonedRuins__/spawning")
+local util = require("__AbandonedRuins20__/lua/utilities")
+local spawning = require("__AbandonedRuins20__/lua/spawning")
 
 local SURFACE_NAME = "ruins"
 

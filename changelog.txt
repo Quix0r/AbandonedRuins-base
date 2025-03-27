@@ -1,7 +1,95 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.1.7
-Date: ????
+Version: 1.1.23
+Date: 2025-03-27
   Changes:
+    - moved ruins lua code as they are strictly seen no entities or items to directory `lua`
+    - same with spawning.lua and utilities.lua
+    - added .gitattributes
+    - ops, missed return keyword, better performance now
+---------------------------------------------------------------------------------------------------
+Version: 1.1.22
+Date: 2025-02-16
+  Bugfixes:
+    - no assert here, else module inserter plans won't work (and maybe others, too)
+    - still some debug log around!
+---------------------------------------------------------------------------------------------------
+Version: 1.1.21
+Date: 2025-02-16
+  Bugfixes:
+    - Need to use `game.forces` and `game.get_player()` instead of `storage`
+---------------------------------------------------------------------------------------------------
+Version: 1.1.20
+Date: 2025-02-16
+  Bugfixes:
+    - `prototype` isn't the proper index (lua/spawning.lua:38: attempt to index field 'prototype' (a nil value))
+---------------------------------------------------------------------------------------------------
+Version: 1.1.19
+Date: 2025-02-16
+  Bugfixes:
+    - Need to use `_G['prototypes']` instead of direct `prototypes`
+---------------------------------------------------------------------------------------------------
+Version: 1.1.18
+Date: 2025-02-15
+  Bugfixes:
+    - proper year used
+---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 2025-02-15
+  Bugfixes:
+    - used-up was renamed to depleted in Factorio 2.0.7 (thanks to @Silly_Warlock)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.16
+Date: 2025-02-15
+  Bugfixes:
+    - All parentheses are required, ops (thanks to @Silly_Warlock)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 2025-02-15
+  Bugfixes:
+    - Ops, no return needed here anymore
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 2025-02-15
+  Bugfixes:
+    - Possible fix from @Silly_Warlock for bad access on protoypes, it should be an item, not a prototype type
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 2025-02-15
+  Bugfixes:
+    - data.raw.* isn't available in control.lua, maybe prototypes.* is? Reported by @arighteousgod and @Sgamez
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 2025-02-14
+  Bugfixes:
+    - Used prototypes.get_entity_filtered() now, thanks to @Silly_Warlock
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 2025-02-14
+  Bugfixes:
+    - Possible fix for crash "LuaPrototypes doesn't contain key splitter." reported by @Samael25
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2025-02-09
+  Bugfixes:
+    - Possible fix, need to ignore key (_ means garbage)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2025-02-09
+  Bugfixes:
+    - Fixed "attempt to index global 'data' (a nil value)" reported by @Sgamez
+    - Possible fix for "LuaGameScript doesn't contain key get_filtered_entity_prototypes."?
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2025-02-09
+  Bugfixes:
+    - Renamed more old references to "AbandonedRuins20" (thanks to @Sgamez for reporting it)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2025-02-09
+  Features:
+    - moved mod's lua scripts to sub folder "lua"
+  Bugfixes:
+    - Fixed a lot of issues with 2.0 base game, like wrong game engine references
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 2022-01-27

@@ -1,8 +1,8 @@
-local util = require("__AbandonedRuins__/utilities")
-local spawning = require("__AbandonedRuins__/spawning")
+local util = require("__AbandonedRuins20__/lua/utilities")
+local spawning = require("__AbandonedRuins20__/lua/spawning")
 ---@type table<string, RuinSet>
 local ruin_sets = {}
-ruin_sets.base = require("__AbandonedRuins__/ruins/base_ruin_set")
+ruin_sets.base = require("__AbandonedRuins20__/lua/ruins/base_ruin_set")
 
 local on_entity_force_changed_event = script.generate_event_name()
 
@@ -18,18 +18,18 @@ local function spawn_chances()
   local mediumThreshold = mediumChance / sumChance * totalChance + smallThreshold
   local largeThreshold = largeChance / sumChance * totalChance + mediumThreshold
 
-  global.spawn_table = {small = smallThreshold, medium = mediumThreshold, large = largeThreshold}
+  storage.spawn_table = {small = smallThreshold, medium = mediumThreshold, large = largeThreshold}
 end
 
 local function init()
   util.set_enemy_force_cease_fire(util.get_enemy_force(), not settings.global["AbandonedRuins-enemy-not-cease-fire"].value)
   spawn_chances()
-  if global.spawn_ruins == nil then
-    global.spawn_ruins = true
+  if storage.spawn_ruins == nil then
+    storage.spawn_ruins = true
   end
-  global.ruin_queue = global.ruin_queue or {}
-  if not global.excluded_surfaces then
-    global.excluded_surfaces = {
+  storage.ruin_queue = storage.ruin_queue or {}
+  if not storage.excluded_surfaces then
+    storage.excluded_surfaces = {
       ["beltlayer"] = true,
       ["pipelayer"] = true,
       ["Factory floor"] = true, -- factorissimo
@@ -52,12 +52,12 @@ script.on_event(defines.events.on_force_created,
 script.on_event(defines.events.on_tick,
   function(event)
     ---@type RuinQueueItem[]
-    local ruins = global.ruin_queue[event.tick]
+    local ruins = storage.ruin_queue[event.tick]
     if not ruins then return end
     for _, ruin in pairs(ruins) do
       spawning.spawn_random_ruin(ruin_sets[settings.global["AbandonedRuins-set"].value][ruin.size], util.ruin_half_sizes[ruin.size], ruin.center, ruin.surface)
     end
-    global.ruin_queue[event.tick] = nil
+    storage.ruin_queue[event.tick] = nil
   end
 )
 
@@ -67,10 +67,10 @@ script.on_event(defines.events.on_tick,
 ---@param ruin RuinQueueItem
 local function queue_ruin(tick, ruin)
   local processing_tick = tick + 1
-  if not global.ruin_queue[processing_tick] then
-    global.ruin_queue[processing_tick] = {}
+  if not storage.ruin_queue[processing_tick] then
+    storage.ruin_queue[processing_tick] = {}
   end
-  table.insert(global.ruin_queue[processing_tick], ruin)
+  table.insert(storage.ruin_queue[processing_tick], ruin)
 end
 
 ---@param size number
@@ -94,33 +94,47 @@ end
 
 script.on_event(defines.events.on_chunk_generated,
   function (e)
-    if global.spawn_ruins == false then return end -- ruin spawning is disabled
+    if storage.spawn_ruins == false then return end -- ruin spawning is disabled
 
-    if util.str_contains_any_from_table(e.surface.name, global.excluded_surfaces) then return end
+    if util.str_contains_any_from_table(e.surface.name, storage.excluded_surfaces) then return end
 
     local center = util.get_center_of_chunk(e.position)
     local min_distance = settings.global["ruins-min-distance-from-spawn"].value
 
     local spawn_type = math.random()
-    if spawn_type <= global.spawn_table["small"] then
+    if spawn_type <= storage.spawn_table["small"] then
       try_ruin_spawn("small", min_distance, center, e.surface, e.tick)
-    elseif spawn_type <= global.spawn_table["medium"] then
+    elseif spawn_type <= storage.spawn_table["medium"] then
       try_ruin_spawn("medium", min_distance, center, e.surface, e.tick)
-    elseif spawn_type <= global.spawn_table["large"] then
+    elseif spawn_type <= storage.spawn_table["large"] then
       try_ruin_spawn("large", min_distance, center, e.surface, e.tick)
+    else
+      log("Unsupported spawn_type=" .. spawn_type .. " found.")
     end
   end
 )
 
 script.on_event({defines.events.on_player_selected_area, defines.events.on_player_alt_selected_area}, function(event)
-  if event.item ~= "AbandonedRuins-claim" then return end
+  --log("event.item='" .. event.item .. "',event.entities()=" .. #event.entities .. " - CALLED!")
+  if (event.item ~= "AbandonedRuins-claim") then
+    --log("event.item='" .. event.item .. "' is not ruin claim - EXIT!")
+    return
+  elseif (#event.entities == 0) then
+    --log("No entities selected - EXIT!")
+    return
+  end
 
-  local neutral_force = game.forces["neutral"]
-
+  local neutral_force = game.forces.neutral
   local claimants_force = game.get_player(event.player_index).force
+  --log("neutral_force='" .. tostring(neutral_force) .. "',claimants_force='" .. tostring(claimants_force) .. "'")
+
   for _, entity in pairs(event.entities) do
+    --log("entity.valid='" .. tostring(entity.valid) .. "',entity.force='" .. tostring(entity.force) .. "'")
     if entity.valid and entity.force == neutral_force then
+      --log("Setting entity.force='" .. tostring(claimants_force) .. "' ...")
       entity.force = claimants_force
+
+      --log("entity.valid='" .. tostring(entity.valid) .. "'")
       if entity.valid then
         script.raise_event(on_entity_force_changed_event, {entity = entity, force = neutral_force})
       end
@@ -133,6 +147,7 @@ script.on_event({defines.events.on_player_selected_area, defines.events.on_playe
       remnant.destroy({raise_destroy = true})
     end
   end
+  --log("EXIT!")
 end)
 
 remote.add_interface("AbandonedRuins",
@@ -152,12 +167,12 @@ remote.add_interface("AbandonedRuins",
     assert(type(spawn_ruins) == "boolean",
       "Remote call parameter to set_spawn_ruins for AbandonedRuins must be a boolean value."
     )
-    global.spawn_ruins = spawn_ruins
+    storage.spawn_ruins = spawn_ruins
   end,
 
   -- Get whether ruins should be spawned at all
   ---@return boolean
-  get_spawn_ruins = function() return global.spawn_ruins end,
+  get_spawn_ruins = function() return storage.spawn_ruins end,
 
   -- Any surface whose name contains this string will not have ruins generated on it.
   ---@param name string
@@ -165,7 +180,7 @@ remote.add_interface("AbandonedRuins",
     assert(type(name) == "string",
       "Remote call parameter to exclude_surface for AbandonedRuins must be a string value."
     )
-    global.excluded_surfaces[name] = true
+    storage.excluded_surfaces[name] = true
   end,
 
   -- You excluded a surface at some earlier point but you don't want it excluded anymore.
@@ -174,7 +189,7 @@ remote.add_interface("AbandonedRuins",
     assert(type(name) == "string",
       "Remote call parameter to reinclude_surface for AbandonedRuins must be a string value."
     )
-    global.excluded_surfaces[name] = nil
+    storage.excluded_surfaces[name] = nil
   end,
 
   -- !! ALWAYS call this in on_load and on_init. !!  

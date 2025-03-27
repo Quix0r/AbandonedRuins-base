@@ -9,7 +9,7 @@ return
     {"heat-exchanger", {x = 0, y = -4.5}, {dir = "west", dead = 0.6}},
     {"inserter", {x = 6.5, y = -5.5}, {dir = "east", dead = 0.4}},
     {"inserter", {x = 6.5, y = -4.5}, {dir = "west", dead = 0.4}},
-    {"iron-chest", {x = 7.5, y = -4.5}, {items = {["used-up-uranium-fuel-cell"] = {type = "random", min = 1, max = 3}}, dead = 0.1}},
+    {"iron-chest", {x = 7.5, y = -4.5}, {items = {["depleted-uranium-fuel-cell"] = {type = "random", min = 1, max = 3}}, dead = 0.1}},
     {"iron-chest", {x = 7.5, y = -5.5}, {items = {["uranium-ore"] = {type = "random", min = 4, max = 13}}, dead = 0.1}},
     {"pipe", {x = -5.5, y = -2.5}, {dead = 0.4}},
     {"pipe", {x = -6.5, y = -2.5}, {dead = 0.4}},

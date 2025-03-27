@@ -1,5 +1,5 @@
-local util = require("__AbandonedRuins__/utilities")
-local expressions = require("__AbandonedRuins__/expression_parsing")
+local util = require("__AbandonedRuins20__/lua/utilities")
+local expressions = require("__AbandonedRuins20__/lua/expression_parsing")
 
 local spawning = {}
 
@@ -35,7 +35,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
 
   local recipe
   if extra_options.recipe then
-    if not game.recipe_prototypes[extra_options.recipe] then
+    if not _G["prototypes"].recipe[extra_options.recipe] then
       util.debugprint("recipe " .. extra_options.recipe .. " does not exist")
     else
       recipe = extra_options.recipe
@@ -72,12 +72,18 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
   if extra_options.items then
     local items = {}
     for name, count_expression in pairs(extra_options.items) do
-      local count = expressions.number(count_expression, vars)
-      if count > 0 then
-        items[name] = count
+      if not _G["prototypes"].item[name] then
+        util.debugprint("item '" .. name .. "' does not exist")
+      else
+        local count = expressions.number(count_expression, vars)
+        if count > 0 then
+          items[name] = count
+        end
       end
     end
-    util.safe_insert(e, items)
+    if not (next(items) == nil) then
+      util.safe_insert(e, items)
+    end
   end
 end
 
@@ -88,7 +94,7 @@ end
 local function spawn_entities(entities, center, surface, vars)
   if not entities then return end
 
-  local prototypes = game.entity_prototypes
+  local prototypes = prototypes.entity
 
   for _, entity_info in pairs(entities) do
     spawn_entity(entity_info[1], entity_info[2], center, surface, entity_info[3] or {}, vars, prototypes)
@@ -101,7 +107,7 @@ end
 local function spawn_tiles(tiles, center, surface)
   if not tiles then return end
 
-  local prototypes = game.tile_prototypes
+  local prototypes = prototypes.tile
   ---@type Tile[]
   local valid = {}
   for _, tile_info in pairs(tiles) do
@@ -149,7 +155,7 @@ end
 local function clear_area(half_size, center, surface)
   local area = util.area_from_center_and_half_size(half_size, center)
   -- exclude tiles that we shouldn't spawn on
-  if surface.count_tiles_filtered{ area = area, limit = 1, collision_mask = {"item-layer", "object-layer"} } == 1 then
+  if surface.count_tiles_filtered{ area = area, limit = 1, collision_mask = { item = true, object = true } } == 1 then
     return false
   end
 

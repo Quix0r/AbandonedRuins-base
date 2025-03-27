@@ -45,8 +45,9 @@ local entity_expressions =
     assert(type(t.entity_type) == "string", "Expression random-of-entity-type: entity_type expected a string, got " .. type(t.entity_type))
     ---@type string[]
     local entities = {}
-    for k in pairs(game.get_filtered_entity_prototypes({{filter = "type", type = t.entity_type}})) do
-      entities[#entities+1] = k
+    --for _, entity in pairs(prototypes[t.entity_type]) do
+    for entity in pairs(prototypes.get_entity_filtered({{filter = "type", type = t.entity_type}})) do
+      entities[#entities+1] = entity
     end
     return entities[math.random(#entities)]
   end

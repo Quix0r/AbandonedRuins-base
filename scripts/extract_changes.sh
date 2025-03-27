@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/sh
 # TLDR: Take the changelog of the latest version and convert it into a format that github markdown understands.
 #
 # ignore first 3 lines and match until line starts with ----, remove said line, remove two spaces at start of all lines,
