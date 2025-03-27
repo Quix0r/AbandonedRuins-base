@@ -103,15 +103,16 @@ local function setup_enemy_force()
   local enemy_force = game.forces["AbandonedRuins:enemy"] or game.create_force("AbandonedRuins:enemy")
 
   util.set_enemy_force_diplomacy(enemy_force, false)
+  storage.enemy_force = enemy_force
 
-  game.forces.enemy = enemy_force
   return enemy_force
 end
 
 util.get_enemy_force = function()
   if (game.forces.enemy and game.forces.enemy.valid) then
-    return game.forces.enemy
+    return storage.enemy_force
   end
+
   return setup_enemy_force()
 end
 

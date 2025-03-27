@@ -1,7 +1,7 @@
 local base_ruin_set = {}
 
-base_ruin_set.small = require("__AbandonedRuins20__/lua/ruins/smallRuins")
-base_ruin_set.medium = require("__AbandonedRuins20__/lua/ruins/mediumRuins")
-base_ruin_set.large = require("__AbandonedRuins20__/lua/ruins/largeRuins")
+for _, size in pairs("small", "medium", "large") do
+	base_ruin_set[size] = require("__AbandonedRuins20__/lua/ruins/" .. size .. "/__init__")
+end
 
 return base_ruin_set

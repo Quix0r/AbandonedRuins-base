@@ -13,7 +13,7 @@ for _, ruin in pairs(
 	"overwhelmedLasers",
 	"shipwreck",
 	"solarField",
-	"SOS",
+	"sos",
 	"swamp",
 	"trainMining",
 	"trainMining2",

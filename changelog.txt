@@ -1,11 +1,18 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.1.23
+Version: 1.2.0
 Date: 2025-03-27
+  Fixes:
+    - defenses will now attack hostile buildings (thank you to @Dran_____ for reporting and @Silly_Warlock
+      for the fix!
+
   Changes:
     - moved ruins lua code as they are strictly seen no entities or items to directory `lua`
     - same with spawning.lua and utilities.lua
     - added .gitattributes
     - ops, missed return keyword, better performance now
+    - renamed <small|medium|large>Ruins.lua to <small|medium|large>/__init__.lua
+    - removed "Ruins" silb from directory name
+    - rewrote 3 duplicated lines to a simple loop
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.22
 Date: 2025-02-16

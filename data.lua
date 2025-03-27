@@ -1,8 +1,7 @@
 local base_util = require("__core__/lualib/util")
 data.raw["utility-constants"]["default"].default_other_force_color = base_util.copy(data.raw["utility-constants"]["default"].default_enemy_force_color)
 
-data:extend
-{
+data:extend({
   {
     type = "selection-tool",
     name = "AbandonedRuins-claim",
@@ -23,8 +22,7 @@ data:extend
     },
     always_include_tiles = true,
     flags = {"only-in-cursor", "spawnable"}
-  },
-  {
+  }, {
     type = "shortcut",
     name = "AbandonedRuins-claim",
     action = "spawn-item",
@@ -34,12 +32,11 @@ data:extend
     small_icon_size = 32,
     item_to_spawn = "AbandonedRuins-claim",
     associated_control_input = "AbandonedRuins-claim"
-  },
-  {
+  }, {
     type = "custom-input",
     name = "AbandonedRuins-claim",
     key_sequence = "SHIFT + C",
     action = "spawn-item",
     item_to_spawn = "AbandonedRuins-claim"
   }
-}
+})
