@@ -1,5 +1,6 @@
 local util = require("__AbandonedRuins20__/lua/utilities")
 local spawning = require("__AbandonedRuins20__/lua/spawning")
+
 ---@type table<string, RuinSet>
 local ruin_sets = {}
 ruin_sets.base = require("__AbandonedRuins20__/lua/ruins/base_ruin_set")

@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 2025-03-28
+  Fixes:
+    - Finally fixed last error, thank you to @Arrevax for reporting it (I saw here, too)
+---------------------------------------------------------------------------------------------------
 Version: 1.2.4
-Date: 2025-03-27
+Date: 2025-03-28
   Fixes:
     - renamed `<l|m|s>_runins` variable to only `ruins`
     - ops, need to insert each small ruin ... ;-)

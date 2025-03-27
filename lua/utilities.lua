@@ -109,7 +109,7 @@ local function setup_enemy_force()
 end
 
 util.get_enemy_force = function()
-  if (game.forces.enemy and game.forces.enemy.valid) then
+  if (storage.enemy_force and storage.enemy_force.valid) then
     return storage.enemy_force
   end
 
