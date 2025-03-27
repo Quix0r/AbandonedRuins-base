@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2025-03-27
+  Fixes:
+    - more curly braces added (table/list/array, not single parameters)
+
+  Changes:
+    - converted many table.insert() into a for in pairs() loop
+---------------------------------------------------------------------------------------------------
 Version: 1.2.2
 Date: 2025-03-27
   Fixes:

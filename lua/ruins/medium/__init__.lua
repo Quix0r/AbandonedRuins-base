@@ -1,6 +1,6 @@
 local m_ruins = {}
 
-for _, ruin in pairs(
+for _, ruin in pairs({
 	"assemblingLine",
 	"carAssembly",
 	"carBelt",
@@ -33,7 +33,7 @@ for _, ruin in pairs(
 	"treeRing",
 	"uraniumMining",
 	"walledSolar"
-) do
+}) do
 	table.insert(m_ruins, require("__AbandonedRuins20__/lua/ruins/medium/" .. ruin))
 end
 
