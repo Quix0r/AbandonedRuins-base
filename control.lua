@@ -43,8 +43,8 @@ local function init()
       ["Factory floor"] = true, -- factorissimo
       ["ControlRoom"] = true -- mobile factory
     }
-    if mods["space-age"] then
-      -- @todo Fulgora and Vulcanus have heavy oil seas, currently not detected as "water"
+    if script.active_mods["space-age"] then
+      -- @todo Fulgora has heavy oil seas, Vulcanus lava "seas", currently not detected as "water"
       storage.excluded_surfaces["fulgora"]  = true
       storage.excluded_surfaces["vulcanus"] = true
     end
