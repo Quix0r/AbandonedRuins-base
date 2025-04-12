@@ -48,13 +48,20 @@ script.on_event(defines.events.on_player_created, function(event)
   local ruin_set = remote.call("AbandonedRuins", "get_current_ruin_set")
   local total_ruins_amount = #ruin_set.small + #ruin_set.medium + #ruin_set.large
   local chunk_radius = math.ceil(math.sqrt(total_ruins_amount) / 2)
-  local mgs = {}
-  mgs.width = chunk_radius * 2 * 32
-  mgs.height = chunk_radius * 2 * 32
-  mgs.default_enable_all_autoplace_controls = false
-  mgs.property_expression_names = {}
-  mgs.property_expression_names.elevation = 10
+  local mgs = {
+    width  = chunk_radius * 2 * 32,
+    height = chunk_radius * 2 * 32,
+    default_enable_all_autoplace_controls = false,
+    property_expression_names = {
+      elevation = 10
+    }
+  }
+
   local surface = game.create_surface(SURFACE_NAME, mgs)
+
+  -- skip invalid surfaces
+  if not surface.valid then return end
+
   surface.request_to_generate_chunks({0, 0}, chunk_radius)
   surface.force_generate_chunk_requests()
 

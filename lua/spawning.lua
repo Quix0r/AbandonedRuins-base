@@ -113,8 +113,9 @@ local function spawn_tiles(tiles, center, surface)
   for _, tile_info in pairs(tiles) do
     local name = tile_info[1]
     local pos = tile_info[2]
+
     if prototypes[name] then
-      valid[#valid+1] = {name = name, position = {center.x + pos.x, center.y + pos.y}}
+      valid[#valid + 1] = {name = name, position = {center.x + pos.x, center.y + pos.y}}
     else
       util.debugprint("tile " .. name .. " does not exist")
     end
@@ -133,6 +134,8 @@ end
 ---@return VariableValues
 local function parse_variables(vars)
   if not vars then return end
+  if (#vars == 0) then return end
+
   local parsed = {}
 
   for _, var in pairs(vars) do
@@ -154,6 +157,7 @@ end
 ---@return boolean @Whether the area is clear and ruins can be spawned
 local function clear_area(half_size, center, surface)
   local area = util.area_from_center_and_half_size(half_size, center)
+
   -- exclude tiles that we shouldn't spawn on
   if surface.count_tiles_filtered{ area = area, limit = 1, collision_mask = { item = true, object = true } } == 1 then
     return false
@@ -173,8 +177,11 @@ end
 ---@param center MapPosition
 ---@param surface LuaSurface
 spawning.spawn_ruin = function(ruin, half_size, center, surface)
-  if surface.valid and clear_area(half_size, center, surface) then
+  assert(surface.valid, string.format("surface.name='%s' is not valid", surface.name))
+
+  if clear_area(half_size, center, surface) then
     local vars = parse_variables(ruin.variables)
+
     spawn_entities(ruin.entities, center, surface, vars)
     spawn_tiles(ruin.tiles, center, surface)
     no_corpse_fade(half_size, center, surface)

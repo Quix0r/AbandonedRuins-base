@@ -2,24 +2,31 @@ local util = require("__AbandonedRuins20__/lua/utilities")
 local spawning = require("__AbandonedRuins20__/lua/spawning")
 
 ---@type table<string, RuinSet>
-local ruin_sets = {}
-ruin_sets.base = require("__AbandonedRuins20__/lua/ruins/base_ruin_set")
+local ruin_sets = {
+  base = require("__AbandonedRuins20__/lua/ruins/base_ruin_set")
+}
 
 local on_entity_force_changed_event = script.generate_event_name()
 
 local function spawn_chances()
-  local smallChance = settings.global["ruins-small-ruin-chance"].value
+  local smallChance  = settings.global["ruins-small-ruin-chance"].value
   local mediumChance = settings.global["ruins-medium-ruin-chance"].value
-  local largeChance = settings.global["ruins-large-ruin-chance"].value
+  local largeChance  = settings.global["ruins-large-ruin-chance"].value
+
   local sumChance = smallChance + mediumChance + largeChance
   local totalChance = math.min(sumChance, 1)
+
   -- now compute cumulative distribution of conditional probabilities for
   -- spawn_type given a spawn occurs.
-  local smallThreshold = smallChance / sumChance * totalChance
+  local smallThreshold  = smallChance  / sumChance * totalChance
   local mediumThreshold = mediumChance / sumChance * totalChance + smallThreshold
-  local largeThreshold = largeChance / sumChance * totalChance + mediumThreshold
+  local largeThreshold  = largeChance  / sumChance * totalChance + mediumThreshold
 
-  storage.spawn_table = {small = smallThreshold, medium = mediumThreshold, large = largeThreshold}
+  storage.spawn_table = {
+    small  = smallThreshold,
+    medium = mediumThreshold,
+    large  = largeThreshold
+  }
 end
 
 local function init()
@@ -36,6 +43,11 @@ local function init()
       ["Factory floor"] = true, -- factorissimo
       ["ControlRoom"] = true -- mobile factory
     }
+    if mods["space-age"] then
+      -- @todo Fulgora and Vulcanus have heavy oil seas, currently not detected as "water"
+      storage.excluded_surfaces["fulgora"]  = true
+      storage.excluded_surfaces["vulcanus"] = true
+    end
   end
 end
 
@@ -94,23 +106,25 @@ local function try_ruin_spawn(size, min_distance, center, surface, tick)
 end
 
 script.on_event(defines.events.on_chunk_generated,
-  function (e)
+  function (event)
+    log(string.format("[on_chunk_generated]: event.surface.name='%s' - CALLED!", event.surface.name))
     if storage.spawn_ruins == false then return end -- ruin spawning is disabled
 
-    if util.str_contains_any_from_table(e.surface.name, storage.excluded_surfaces) then return end
+    if util.str_contains_any_from_table(event.surface.name, storage.excluded_surfaces) then
+      log(string.format("[on_chunk_generated]: event.surface.name='%s' is excluded - EXIT!", event.surface.name))
+      return
+    end
 
-    local center = util.get_center_of_chunk(e.position)
+    local center       = util.get_center_of_chunk(event.position)
     local min_distance = settings.global["ruins-min-distance-from-spawn"].value
+    local spawn_chance = math.random()
 
-    local spawn_type = math.random()
-    if spawn_type <= storage.spawn_table["small"] then
-      try_ruin_spawn("small", min_distance, center, e.surface, e.tick)
-    elseif spawn_type <= storage.spawn_table["medium"] then
-      try_ruin_spawn("medium", min_distance, center, e.surface, e.tick)
-    elseif spawn_type <= storage.spawn_table["large"] then
-      try_ruin_spawn("large", min_distance, center, e.surface, e.tick)
-    else
-      log("Unsupported spawn_type=" .. spawn_type .. " found.")
+    if spawn_chance <= storage.spawn_table["small"] then
+      try_ruin_spawn("small", min_distance, center, event.surface, event.tick)
+    elseif spawn_chance <= storage.spawn_table["medium"] then
+      try_ruin_spawn("medium", min_distance, center, event.surface, event.tick)
+    elseif spawn_chance <= storage.spawn_table["large"] then
+      try_ruin_spawn("large", min_distance, center, event.surface, event.tick)
     end
   end
 )
@@ -193,8 +207,8 @@ remote.add_interface("AbandonedRuins",
     storage.excluded_surfaces[name] = nil
   end,
 
-  -- !! ALWAYS call this in on_load and on_init. !!  
-  -- !! The ruins sets are not save/loaded. !!  
+  -- !! ALWAYS call this in on_load and on_init. !!
+  -- !! The ruins sets are not saved or loaded. !!
   -- The ruins should have the sizes given in util.ruin_half_sizes, e.g. ruins in the small_ruins array should be 8x8 tiles.
   -- See also: docs/ruin_sets.md
   ---@param name string
@@ -202,25 +216,32 @@ remote.add_interface("AbandonedRuins",
   ---@param medium_ruins Ruin[]
   ---@param large_ruins Ruin[]
   add_ruin_set = function(name, small_ruins, medium_ruins, large_ruins)
+    assert(type(name) == "string",
+      "Remote call parameter to add_ruin_set for AbandonedRuins must be a string value."
+    )
     assert(small_ruins and next(small_ruins))
     assert(medium_ruins and next(medium_ruins))
     assert(large_ruins and next(large_ruins))
 
-    ruin_sets[name] = {}
-    ruin_sets[name].small = small_ruins
-    ruin_sets[name].medium = medium_ruins
-    ruin_sets[name].large = large_ruins
+    ruin_sets[name] = {
+      small  = small_ruins,
+      medium = medium_ruins,
+      large  = large_ruins
+    }
   end,
 
-  -- !! The ruins sets are not save/loaded. !!
+  -- !! The ruins sets are not saved or loaded. !!
   -- returns {small = {<array of ruins>}, medium = {<array of ruins>}, large = {<array of ruins>}}
   ---@param name string
   ---@return RuinSet
   get_ruin_set = function(name)
+    assert(type(name) == "string",
+      "Remote call parameter to get_ruin_set for AbandonedRuins must be a string value."
+    )
     return ruin_sets[name]
   end,
 
-  -- !! The ruins sets are not save/loaded. !!
+  -- !! The ruins sets are not saved or loaded. !!
   -- returns {small = {<array of ruins>}, medium = {<array of ruins>}, large = {<array of ruins>}}
   ---@return RuinSet
   get_current_ruin_set = function()

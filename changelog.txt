@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.6
+Date: 2025-04-12
+  Changes:
+    - added Fulgora and Vulcanus as excluded surface, the "water" there isn't
+      detected correctly yet (see `@todo`), @mooklepticon and @Silly_Warlock reported it
+    - renamed a few variables, e.g. `e` to `event` as I don't shorten anything
+    - don't invoke these functions with invalid surfaces, otherwise you will get an assertion
+---------------------------------------------------------------------------------------------------
 Version: 1.2.5
 Date: 2025-03-28
   Fixes:
