@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.8
+Date: 2025-04-18
+  Fixes:
+    - Possible fix for spawning ruins on heavy oil (Fulgora) or lava (Vulcanus)
+      or anything not ground
+
+  Changes:
+    - more assertions added
+    - more debug lines added (for checking if above fix works)
+    - reformatted some one-line code
+    - added debug messages and global runtime setting (map) for intense debugging
+---------------------------------------------------------------------------------------------------
 Version: 1.2.7
 Date: 2025-04-12
   Fixes:

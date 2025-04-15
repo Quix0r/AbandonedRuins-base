@@ -51,31 +51,48 @@ util.safe_insert = base_util.insert_safe
 ---@param entity LuaEntity
 ---@param fluid_dict table<string, number> Dictionary of fluid names to amounts
 util.safe_insert_fluid = function(entity, fluid_dict)
-  if not (entity and entity.valid and fluid_dict) then return end
+  if not (entity and entity.valid and fluid_dict) then
+    log(string.format("[safe_insert_fluid]: entitiy[]='%s' or fluid_dict[]='%s' is not valid!", type(entity), type(fluid_dict)))
+    return
+  end
+
   local fluids = prototypes.fluid
   local insert = entity.insert_fluid
+
   for name, amount in pairs (fluid_dict) do
-    if fluids[name] then
+    if fluids[name] or not fluids[name].valid then
       insert{name = name, amount = amount}
     else
-      log("Fluid to insert not valid: " .. name)
+      log(string.format("[safe_insert_fluid]: name='%s' is not a valid fluid to insert", name))
     end
   end
+
+  if debug_log then log("[safe_insert_fluid]: EXIT!") end
 end
 
 ---@param entity LuaEntity
 ---@param damage_info Damage
 ---@param damage_amount number
 util.safe_damage = function(entity, damage_info, damage_amount)
-  if not (entity and entity.valid) then return end
+  if not (entity and entity.valid) then
+    log(string.format("[safe_damage]: entity[]='%s' is not valid!", type(entity)))
+    return
+  end
+
   entity.damage(damage_amount, damage_info.force or "neutral", damage_info.type or "physical")
 end
 
 ---@param entity LuaEntity
 ---@param chance number
 util.safe_die = function(entity, chance)
-  if not (entity and entity.valid) then return end
-  if math.random() <= chance then entity.die() end
+  if not (entity and entity.valid) then
+    log(string.format("[safe_damage]: entity[]='%s' is not valid!", type(entity)))
+    return
+  end
+
+  if math.random() <= chance then
+    entity.die()
+  end
 end
 
 -- Set cease_fire status for all forces.
@@ -96,6 +113,7 @@ util.set_enemy_force_diplomacy = function(enemy_force, cease_fire)
       enemy_force.set_friend(force, true)
     end
   end
+
   util.set_enemy_force_cease_fire(enemy_force, cease_fire)
 end
 

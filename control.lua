@@ -1,6 +1,8 @@
 local util = require("__AbandonedRuins20__/lua/utilities")
 local spawning = require("__AbandonedRuins20__/lua/spawning")
 
+debug_log = settings.global["AbandonedRuins-enable-debug-log"].value
+
 ---@type table<string, RuinSet>
 local ruin_sets = {
   base = require("__AbandonedRuins20__/lua/ruins/base_ruin_set")
@@ -31,6 +33,7 @@ end
 
 local function init()
   util.set_enemy_force_cease_fire(util.get_enemy_force(), not settings.global["AbandonedRuins-enemy-not-cease-fire"].value)
+
   spawn_chances()
   if storage.spawn_ruins == nil then
     storage.spawn_ruins = true
@@ -38,15 +41,15 @@ local function init()
   storage.ruin_queue = storage.ruin_queue or {}
   if not storage.excluded_surfaces then
     storage.excluded_surfaces = {
-      ["beltlayer"] = true,
-      ["pipelayer"] = true,
+      ["beltlayer"]     = true,
+      ["pipelayer"]     = true,
       ["Factory floor"] = true, -- factorissimo
-      ["ControlRoom"] = true -- mobile factory
+      ["ControlRoom"]   = true -- mobile factory
     }
     if script.active_mods["space-age"] then
       -- @todo Fulgora has heavy oil seas, Vulcanus lava "seas", currently not detected as "water"
-      storage.excluded_surfaces["fulgora"]  = true
-      storage.excluded_surfaces["vulcanus"] = true
+      --storage.excluded_surfaces["fulgora"]  = true
+      --storage.excluded_surfaces["vulcanus"] = true
     end
   end
 end
@@ -107,11 +110,11 @@ end
 
 script.on_event(defines.events.on_chunk_generated,
   function (event)
-    log(string.format("[on_chunk_generated]: event.surface.name='%s' - CALLED!", event.surface.name))
+    if debug_log then log(string.format("[on_chunk_generated]: event.surface.name='%s' - CALLED!", event.surface.name)) end
     if storage.spawn_ruins == false then return end -- ruin spawning is disabled
 
     if util.str_contains_any_from_table(event.surface.name, storage.excluded_surfaces) then
-      log(string.format("[on_chunk_generated]: event.surface.name='%s' is excluded - EXIT!", event.surface.name))
+      if debug_log then log(string.format("[on_chunk_generated]: event.surface.name='%s' is excluded - EXIT!", event.surface.name)) end
       return
     end
 
@@ -126,30 +129,32 @@ script.on_event(defines.events.on_chunk_generated,
     elseif spawn_chance <= storage.spawn_table["large"] then
       try_ruin_spawn("large", min_distance, center, event.surface, event.tick)
     end
+
+    if debug_log then log("[on_chunk_generated]: EXIT!") end
   end
 )
 
 script.on_event({defines.events.on_player_selected_area, defines.events.on_player_alt_selected_area}, function(event)
-  --log("event.item='" .. event.item .. "',event.entities()=" .. #event.entities .. " - CALLED!")
+  if debug_log then log("[on_player_selected_area]: event.item='" .. event.item .. "',event.entities()=" .. #event.entities .. " - CALLED!") end
   if (event.item ~= "AbandonedRuins-claim") then
-    --log("event.item='" .. event.item .. "' is not ruin claim - EXIT!")
+    if debug_log then log("[on_player_selected_area]: event.item='" .. event.item .. "' is not ruin claim - EXIT!") end
     return
   elseif (#event.entities == 0) then
-    --log("No entities selected - EXIT!")
+    if debug_log then log("[on_player_selected_area]: No entities selected - EXIT!") end
     return
   end
 
   local neutral_force = game.forces.neutral
   local claimants_force = game.get_player(event.player_index).force
-  --log("neutral_force='" .. tostring(neutral_force) .. "',claimants_force='" .. tostring(claimants_force) .. "'")
+  if debug_log then log("[on_player_selected_area]: neutral_force='" .. tostring(neutral_force) .. "',claimants_force='" .. tostring(claimants_force) .. "'") end
 
   for _, entity in pairs(event.entities) do
-    --log("entity.valid='" .. tostring(entity.valid) .. "',entity.force='" .. tostring(entity.force) .. "'")
+    if debug_log then log("[on_player_selected_area]:entity.valid='" .. tostring(entity.valid) .. "',entity.force='" .. tostring(entity.force) .. "'") end
     if entity.valid and entity.force == neutral_force then
-      --log("Setting entity.force='" .. tostring(claimants_force) .. "' ...")
+      if debug_log then log("[on_player_selected_area]:Setting entity.force='" .. tostring(claimants_force) .. "' ...") end
       entity.force = claimants_force
 
-      --log("entity.valid='" .. tostring(entity.valid) .. "'")
+      if debug_log then log("[on_player_selected_area]:entity.valid='" .. tostring(entity.valid) .. "'") end
       if entity.valid then
         script.raise_event(on_entity_force_changed_event, {entity = entity, force = neutral_force})
       end
@@ -162,7 +167,8 @@ script.on_event({defines.events.on_player_selected_area, defines.events.on_playe
       remnant.destroy({raise_destroy = true})
     end
   end
-  --log("EXIT!")
+
+  if debug_log then log("[on_player_selected_area]:EXIT!") end
 end)
 
 remote.add_interface("AbandonedRuins",

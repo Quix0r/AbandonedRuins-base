@@ -7,6 +7,13 @@ data:extend({
     order = "a",
   },
   {
+    type = "bool-setting",
+    name = "AbandonedRuins-enable-debug-log",
+    setting_type = "runtime-global",
+    default_value = false,
+    order = "aa",
+  },
+  {
     type = "int-setting",
     name = "ruins-min-distance-from-spawn",
     setting_type = "runtime-global",
