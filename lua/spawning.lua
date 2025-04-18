@@ -131,7 +131,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
     end
   end
 
-  if debug_log then log("[spawn_entities]: EXIT!") end
+  if debug_log then log("[spawn_entity]: EXIT!") end
 end
 
 ---@param entities RuinEntity[]

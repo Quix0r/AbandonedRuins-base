@@ -67,13 +67,26 @@ script.on_event(defines.events.on_force_created,
 
 script.on_event(defines.events.on_tick,
   function(event)
+    if debug_log then log(string.format("[on_tick]: event.tick=%d - CALLED!", event.tick)) end
+
     ---@type RuinQueueItem[]
     local ruins = storage.ruin_queue[event.tick]
-    if not ruins then return end
+
+    if not ruins then
+      if debug_log then log(string.format("[on_tick]: No ruin queued for event.tick=%d  EXIT!", event.tick)) end
+      return
+    end
+
+    if debug_log then log(string.format("[on_tick]: Spawning %d random ruin sets ...", #ruins)) end
     for _, ruin in pairs(ruins) do
+      if debug_log then log(string.format("[on_tick]: Spawning ruin.size=%d,ruin.center='%s',ruin.surface='%s' ...", ruin.size, tostring(ruin.center), tostring(ruin.surface))) end
       spawning.spawn_random_ruin(ruin_sets[settings.global["AbandonedRuins-set"].value][ruin.size], util.ruin_half_sizes[ruin.size], ruin.center, ruin.surface)
     end
+
+    if debug_log then log(string.format("[on_tick]: Deleting ruin(s) on event.tick=%d ...", event.tick)) end
     storage.ruin_queue[event.tick] = nil
+
+    if debug_log then log("[on_tick]: EXIT!") end
   end
 )
 
@@ -82,11 +95,16 @@ script.on_event(defines.events.on_tick,
 ---@param tick uint
 ---@param ruin RuinQueueItem
 local function queue_ruin(tick, ruin)
+  if debug_log then log(string.format("[queue_ruin]: tick=%d,ruin[]='%s' - CALLED!", tick, type(ruin)))
   local processing_tick = tick + 1
+
   if not storage.ruin_queue[processing_tick] then
     storage.ruin_queue[processing_tick] = {}
   end
+
   table.insert(storage.ruin_queue[processing_tick], ruin)
+
+  if debug_log then log("[queue_ruin]: EXIT!") end
 end
 
 ---@param size number
@@ -95,25 +113,37 @@ end
 ---@param surface LuaSurface
 ---@param tick uint
 local function try_ruin_spawn(size, min_distance, center, surface, tick)
+  if debug_log then log(string.format("[try_ruin_spawn]: size=%d,min_distance=%d,center[]='%s',surface[]='%s',tick=%d - CALLED!", size, min_distance, type(center), type(surface), tick)) end
+
   min_distance = min_distance * util.ruin_min_distance_multiplier[size]
-  if math.abs(center.x) < min_distance and math.abs(center.y) < min_distance then return end -- too close to spawn
+  if debug_log then log(string.format("[try_ruin_spawn]: min_distance=%d", min_distance)) end
+
+  if math.abs(center.x) < min_distance and math.abs(center.y) < min_distance then
+    if debug_log then log(string.format("[try_ruin_spawn]: min_distance=%d is to close to spawn area - EXIT!", min_distance)) end
+    return
+  end
 
   -- random variance so they aren't always chunk aligned
   local variance = -(util.ruin_half_sizes[size] * 0.75) + 12 -- 4 -> 9, 8 -> 6, 16 -> 0. Was previously 4 -> 10, 8 -> 5, 16 -> 0
+  if debug_log then log(string.format("[try_ruin_spawn]: variance={:04.2f},center.x=%d,center.y=%d - BEFORE!", variance, center.x, center.y))
   if variance > 0 then
     center.x = center.x + math.random(-variance, variance)
     center.y = center.y + math.random(-variance, variance)
   end
+  if debug_log then log(string.format("[try_ruin_spawn]: variance={:04.2f},center.x=%d,center.y=%d - AFTER!", variance, center.x, center.y))
 
   queue_ruin(tick, {size = size, center = center, surface = surface})
+
+  if debug_log then log("[on_chunk_generated]: EXIT!") end
 end
 
 script.on_event(defines.events.on_chunk_generated,
   function (event)
     if debug_log then log(string.format("[on_chunk_generated]: event.surface.name='%s' - CALLED!", event.surface.name)) end
-    if storage.spawn_ruins == false then return end -- ruin spawning is disabled
-
-    if util.str_contains_any_from_table(event.surface.name, storage.excluded_surfaces) then
+    if storage.spawn_ruins == false then
+      if debug_log then log("[on_chunk_generated]: Spawning ruins is disabled by configuration - EXIT!") end
+      return
+    elseif util.str_contains_any_from_table(event.surface.name, storage.excluded_surfaces) then
       if debug_log then log(string.format("[on_chunk_generated]: event.surface.name='%s' is excluded - EXIT!", event.surface.name)) end
       return
     end
