@@ -3,7 +3,10 @@ Version: 1.2.8
 Date: 2025-04-18
   Fixes:
     - Possible fix for spawning ruins on heavy oil (Fulgora) or lava (Vulcanus)
-      or anything not ground
+      or anything not ground without using hard-coded planet names
+    - the goal here is to allow Nauvis-like (water-based oceans) planets to have
+      ruins spawned on without explicitly naming each planet and not spawning on anything
+      that isn't a ground tile
 
   Changes:
     - more assertions added
