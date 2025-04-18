@@ -42,6 +42,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
       type(prototypes)
     ))
   end
+
   local entity_name = expressions.entity(entity, vars)
   if debug_log then log(string.format("[spawn_entity]: entity_name='%s',entity.name='%s'", entity_name, entity.name)) end
 
@@ -219,7 +220,7 @@ end
 ---@param surface LuaSurface
 ---@return boolean @Whether the area is clear and ruins can be spawned
 local function clear_area(half_size, center, surface)
-  if debug_log then log(string.format("[clear_area]: half_size[]='%s',center[]='%s',surface='%s' - CALLED!", type(half_size), type(center), type(surface))) end
+  if debug_log then log(string.format("[clear_area]: half_size[]='%s',center[]='%s',surface[]='%s' - CALLED!", type(half_size), type(center), type(surface))) end
   local area = util.area_from_center_and_half_size(half_size, center)
 
   -- exclude tiles that we shouldn't spawn on
@@ -235,7 +236,7 @@ local function clear_area(half_size, center, surface)
     end
   end
 
-  log("[clear_area]: Area is clear for ruin! - EXIT!")
+  if debug_log then log("[clear_area]: Area is clear for ruin! - EXIT!") end
   return true
 end
 
