@@ -126,12 +126,12 @@ local function try_ruin_spawn(size, min_distance, center, surface, tick)
 
   -- random variance so they aren't always chunk aligned
   local variance = -(util.ruin_half_sizes[size] * 0.75) + 12 -- 4 -> 9, 8 -> 6, 16 -> 0. Was previously 4 -> 10, 8 -> 5, 16 -> 0
-  if debug_log then log(string.format("[try_ruin_spawn]: variance={:04.2f},center.x=%d,center.y=%d - BEFORE!", variance, center.x, center.y)) end
+  if debug_log then log(string.format("[try_ruin_spawn]: variance=%.0f,center.x=%d,center.y=%d - BEFORE!", variance, center.x, center.y)) end
   if variance > 0 then
     center.x = center.x + math.random(-variance, variance)
     center.y = center.y + math.random(-variance, variance)
   end
-  if debug_log then log(string.format("[try_ruin_spawn]: variance={:04.2f},center.x=%d,center.y=%d - AFTER!", variance, center.x, center.y)) end
+  if debug_log then log(string.format("[try_ruin_spawn]: variance=%.0f,center.x=%d,center.y=%d - AFTER!", variance, center.x, center.y)) end
 
   queue_ruin(tick, {size = size, center = center, surface = surface})
 
