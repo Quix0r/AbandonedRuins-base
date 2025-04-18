@@ -5,8 +5,8 @@ local parsing = {}
 ---@param table1 table table to extend
 ---@param table2 table
 local function extend(table1, table2)
-  for k,v in pairs(table2) do
-    table1[k] = v
+  for key, value in pairs(table2) do
+    table1[key] = value
   end
 end
 
@@ -45,9 +45,9 @@ local entity_expressions =
     assert(type(t.entity_type) == "string", "Expression random-of-entity-type: entity_type expected a string, got " .. type(t.entity_type))
     ---@type string[]
     local entities = {}
-    --for _, entity in pairs(prototypes[t.entity_type]) do
+
     for entity in pairs(prototypes.get_entity_filtered({{filter = "type", type = t.entity_type}})) do
-      entities[#entities+1] = entity
+      entities[#entities + 1] = entity
     end
     return entities[math.random(#entities)]
   end

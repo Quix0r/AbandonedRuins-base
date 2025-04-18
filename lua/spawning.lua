@@ -153,33 +153,33 @@ local function spawn_entities(entities, center, surface, vars)
   if debug_log then log("[spawn_entities]: EXIT!") end
 end
 
----@param tiles RuinTile[]
+---@param ruin_tiles RuinTile[]
 ---@param center MapPosition
 ---@param surface LuaSurface
-local function spawn_tiles(tiles, center, surface)
-  if debug_log then log(string.format("[spawn_tiles]: tiles[]=%s,center[]='%s',surface[]='%s' - CALLED!", type(tiles), type(center), type(surface))) end
-  if not tiles or not surface then return end
-  if #tiles == 0 then return end
+local function spawn_tiles(ruin_tiles, center, surface)
+  if debug_log then log(string.format("[spawn_tiles]: ruin_tiles[]=%s,center[]='%s',surface[]='%s' - CALLED!", type(ruin_tiles), type(center), type(surface))) end
+  if not ruin_tiles or not surface then return end
+  if #ruin_tiles == 0 then return end
   assert(surface.valid, string.format("[spawn_entities]: surface.name='%s' is not valid", surface.name))
 
-  local valid = {}
+  local tiles = {}
 
-  if debug_log then log(string.format("[spawn_tiles]: Spawning %d tiles on surface.name='%s' ...", #tiles, surface.name)) end
-  for _, tile_info in pairs(tiles) do
-    local name = tile_info[1]
-    local pos = tile_info[2]
-
-    if prototypes.tile[name] then
-      if debug_log then log(string.format("[spawn_tiles]: name='%s',center.x=%d,center.y=%d,pos.x=%d,pos.y=%d", name, center.x, center.y, pos.x, pos.y)) end
-      valid[#valid + 1] = {name = name, position = {center.x + pos.x, center.y + pos.y}}
+  if debug_log then log(string.format("[spawn_tiles]: Spawning %d tiles on surface.name='%s' ...", #ruin_tiles, surface.name)) end
+  for _, tile_spec in pairs(ruin_tiles) do
+    if prototypes.tile[tile_spec[1]] then
+      if debug_log then log(string.format("[spawn_tiles]: tile_spec[1]='%s',center.x=%d,center.y=%d,tile_spec[2].x=%d,tile_spec[2].y=%d", tile_spec[1], center.x, center.y, tile_spec[2].x, tile_spec[2].y)) end
+      tiles[#tiles + 1] = {
+        name     = tile_spec[1],
+        position = {center.x + tile_spec[2].x, center.y + tile_spec[2].y}
+      }
     else
-      util.debugprint(string.format("[spawn_tiles]: Tile '%s' does not exist!", name))
+      util.debugprint(string.format("[spawn_tiles]: Tile '%s' does not exist!", tile_spec[1]))
     end
   end
 
-  if debug_log then log(string.format("[spawn_tiles]: Setting %d valid tiles for surface.name='%s' ...", #valid, surface.name)) end
+  if debug_log then log(string.format("[spawn_tiles]: Setting %d tiles for surface.name='%s' ...", #tiles, surface.name)) end
   surface.set_tiles(
-    valid,
+    tiles,
     true, -- correct_tiles,                Default: true
     true, -- remove_colliding_entities,    Default: true
     true, -- remove_colliding_decoratives, Default: true
@@ -189,17 +189,17 @@ local function spawn_tiles(tiles, center, surface)
 end
 
 -- Evaluates the values of the variables.
----@param vars Variable[]
+---@param variables Variable[]
 ---@return VariableValues
-local function parse_variables(vars)
-  if debug_log then log(string.format("[parse_variables]: vars[]='%s' - CALLED!", type(vars))) end
-  if not vars then return end
-  if #vars == 0 then return end
+local function parse_variables(variables)
+  if debug_log then log(string.format("[parse_variables]: variables[]='%s' - CALLED!", type(variables))) end
+  if not variables then return end
+  if #variables == 0 then return end
 
   local parsed = {}
 
-  if debug_log then log(string.format("[parse_variables]: Parsing %d variables ...", #vars)) end
-  for _, var in pairs(vars) do
+  if debug_log then log(string.format("[parse_variables]: Parsing %d variables ...", #variables)) end
+  for _, var in pairs(variables) do
     if debug_log then log(string.format("[parse_variables]: var.type='%s',var.name='%s',var.value[]='%s'", var.type, var.name, type(var.value))) end
     if var.type == "entity-expression" then
       parsed[var.name] = expressions.entity(var.value)
@@ -256,10 +256,10 @@ spawning.spawn_ruin = function(ruin, half_size, center, surface)
   assert(surface.valid, string.format("surface.name='%s' is not valid", surface.name))
 
   if clear_area(half_size, center, surface) then
-    local vars = parse_variables(ruin.variables)
-    if debug_log then log(string.format("[spawn_ruin]: vars[]='%s'", type(vars))) end
+    local variables = parse_variables(ruin.variables)
+    if debug_log then log(string.format("[spawn_ruin]: variables[]='%s'", type(variables))) end
 
-    spawn_entities(ruin.entities, center, surface, vars)
+    spawn_entities(ruin.entities, center, surface, variables)
     spawn_tiles(ruin.tiles, center, surface)
     no_corpse_fade(half_size, center, surface)
   end
