@@ -108,13 +108,13 @@ local function queue_ruin(tick, ruin)
   if debug_log then log("[queue_ruin]: EXIT!") end
 end
 
----@param size number
+---@param size string
 ---@param min_distance number
 ---@param center MapPosition
 ---@param surface LuaSurface
 ---@param tick uint
 local function try_ruin_spawn(size, min_distance, center, surface, tick)
-  if debug_log then log(string.format("[try_ruin_spawn]: size=%d,min_distance=%d,center[]='%s',surface[]='%s',tick=%d - CALLED!", size, min_distance, type(center), type(surface), tick)) end
+  if debug_log then log(string.format("[try_ruin_spawn]: size=%s,min_distance=%d,center[]='%s',surface[]='%s',tick=%d - CALLED!", size, min_distance, type(center), type(surface), tick)) end
 
   min_distance = min_distance * util.ruin_min_distance_multiplier[size]
   if debug_log then log(string.format("[try_ruin_spawn]: min_distance=%d", min_distance)) end
