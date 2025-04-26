@@ -6,6 +6,7 @@ debug_on_tick = settings.global["AbandonedRuins-enable-debug-on-tick"].value
 
 ---@type table<string, RuinSet>
 local ruin_sets = {
+  -- Load base set
   base = require("__AbandonedRuins20__/lua/ruins/base_ruin_set")
 }
 
@@ -73,8 +74,13 @@ script.on_event(defines.events.on_tick,
     ---@type RuinQueueItem[]
     local ruins = storage.ruin_queue[event.tick]
 
+    if debug_on_tick then log(string.format("[on_tick]: runins[]='%s'", type(ruins))) end
     if not ruins then
       if debug_on_tick then log(string.format("[on_tick]: No ruin queued for event.tick=%d  EXIT!", event.tick)) end
+      return
+    elseif #ruins == 0 then
+      log(string.format("[on_tick]: event.tick=%d has empty list set, deleting list ... - EXIT!", event.tick))
+      storage.ruin_queue[event.tick] = nil
       return
     end
 
@@ -100,9 +106,11 @@ local function queue_ruin(tick, ruin)
   local processing_tick = tick + 1
 
   if not storage.ruin_queue[processing_tick] then
+    if debug_log then log(string.format("[queue_ruin]: Initializing ruins list on tick=%d", tick)) end
     storage.ruin_queue[processing_tick] = {}
   end
 
+  if debug_log then log(string.format("[queue_ruin]: Queueing ruin[]='%s' ...", type(ruin))) end
   table.insert(storage.ruin_queue[processing_tick], ruin)
 
   if debug_log then log("[queue_ruin]: EXIT!") end
@@ -114,7 +122,8 @@ end
 ---@param surface LuaSurface
 ---@param tick uint
 local function try_ruin_spawn(size, min_distance, center, surface, tick)
-  if debug_log then log(string.format("[try_ruin_spawn]: size=%s,min_distance=%d,center[]='%s',surface[]='%s',tick=%d - CALLED!", size, min_distance, type(center), type(surface), tick)) end
+  if debug_log then log(string.format("[try_ruin_spawn]: size='%s',min_distance=%d,center[]='%s',surface[]='%s',tick=%d - CALLED!", size, min_distance, type(center), type(surface), tick)) end
+  assert(util.ruin_min_distance_multiplier[size], string.format("[try_ruin_spawn]: size='%s' is not found in multiplier table", size))
 
   min_distance = min_distance * util.ruin_min_distance_multiplier[size]
   if debug_log then log(string.format("[try_ruin_spawn]: min_distance=%d", min_distance)) end
@@ -128,6 +137,7 @@ local function try_ruin_spawn(size, min_distance, center, surface, tick)
   local variance = -(util.ruin_half_sizes[size] * 0.75) + 12 -- 4 -> 9, 8 -> 6, 16 -> 0. Was previously 4 -> 10, 8 -> 5, 16 -> 0
   if debug_log then log(string.format("[try_ruin_spawn]: variance=%.0f,center.x=%d,center.y=%d - BEFORE!", variance, center.x, center.y)) end
   if variance > 0 then
+    if debug_log then log(string.format("[try_ruin_spawn]: Applying random variance=%.0f ...", variance)) end
     center.x = center.x + math.random(-variance, variance)
     center.y = center.y + math.random(-variance, variance)
   end
