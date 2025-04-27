@@ -1,4 +1,4 @@
-local util = require("__AbandonedRuins20__/lua/utilities")
+local utils = require("__AbandonedRuins20__/lua/utilities")
 local expressions = require("__AbandonedRuins20__/lua/expression_parsing")
 
 local spawning = {}
@@ -11,7 +11,7 @@ local function no_corpse_fade(half_size, center, surface)
   if half_size <= 0 or not center or not surface then return end
   assert(surface.valid, string.format("[spawn_entities]: surface.name='%s' is not valid", surface.name))
 
-  local area = util.area_from_center_and_half_size(half_size, center)
+  local area = utils.area_from_center_and_half_size(half_size, center)
   if debug_log then log(string.format("[no_corpse_fade]: area[]='%s',surface.name='%s'", type(area), surface.name)) end
 
   for _, entity in pairs(surface.find_entities_filtered({area = area, type={"corpse", "rail-remnants"}})) do
@@ -47,14 +47,14 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
   if debug_log then log(string.format("[spawn_entity]: entity_name='%s',entity.name='%s'", entity_name, entity.name)) end
 
   if not prototypes[entity_name] then
-    util.debugprint(string.format("[spawn_entity]: entity '%s' does not exist!", entity_name))
+    log(string.format("[spawn_entity]: entity '%s' does not exist!", entity_name)) end
     return
   end
 
   local force = extra_options.force or "neutral"
   if debug_log then log(string.format("[spawn_entity]: force='%s' - BEFORE!", force)) end
   if force == "enemy" then
-    force = util.get_enemy_force()
+    force = utils.get_enemy_force()
   end
   if debug_log then log(string.format("[spawn_entity]: force='%s' - AFTER!", force)) end
 
@@ -62,7 +62,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
   if debug_log then log(string.format("[spawn_entity]: extra_options.recipe[]='%s'", type(extra_options.recipe))) end
   if extra_options.recipe then
     if not _G["prototypes"].recipe[extra_options.recipe] then
-      util.debugprint(string.format("[spawn_entity]: recipe '%s'' does not exist", extra_options.recipe))
+      log(string.format("[spawn_entity]: recipe '%s'' does not exist!", extra_options.recipe))
     else
       recipe = extra_options.recipe
     end
@@ -82,12 +82,12 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
 
   if debug_log then log(string.format("[spawn_entity]: extra_options.dmg[]='%s'", type(extra_options.dmg))) end
   if extra_options.dmg then
-    util.safe_damage(e, extra_options.dmg, expressions.number(extra_options.dmg.dmg, vars))
+    utils.safe_damage(e, extra_options.dmg, expressions.number(extra_options.dmg.dmg, vars))
   end
 
   if debug_log then log(string.format("[spawn_entity]: extra_options.dead[]='%s'", type(extra_options.dead))) end
   if extra_options.dead then
-    util.safe_die(e, extra_options.dead)
+    utils.safe_die(e, extra_options.dead)
   end
 
   if debug_log then log(string.format("[spawn_entity]: extra_options.fluids[]='%s'", type(extra_options.fluids))) end
@@ -104,7 +104,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
     end
 
     if debug_log then log(string.format("[spawn_entity]: Safely inserting %d fluids ...", #fluids)) end
-    util.safe_insert_fluid(e, fluids)
+    utils.safe_insert_fluid(e, fluids)
   end
 
   if debug_log then log(string.format("[spawn_entity]: extra_optios.items[]='%s'", type(extra_options.items))) end
@@ -114,7 +114,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
     for name, count_expression in pairs(extra_options.items) do
       if debug_log then log(string.format("[spawn_entity]: name='%s',count_expression='%s'", name, count_expression)) end
       if not _G["prototypes"].item[name] then
-        util.debugprint(string.format("[spawn_entity]: item '%s' does not exist", name))
+        log(string.format("[spawn_entity]: item '%s' does not exist!", name))
       else
         local count = expressions.number(count_expression, vars)
         if count > 0 then
@@ -127,7 +127,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
     if debug_log then log(string.format("[spawn_entity]: Found %d items.", #items)) end
     if not (next(items) == nil) then
       if debug_log then log(string.format("[spawn_entity]: Safely inserting %d items ...", #items)) end
-      util.safe_insert(e, items)
+      utils.safe_insert(e, items)
     end
   end
 
@@ -174,7 +174,7 @@ local function spawn_tiles(ruin_tiles, center, surface)
         position = {center.x + tile_spec[2].x, center.y + tile_spec[2].y}
       }
     else
-      util.debugprint(string.format("[spawn_tiles]: Tile '%s' does not exist!", tile_spec[1]))
+      log(string.format("[spawn_tiles]: Tile '%s' does not exist!", tile_spec[1]))
     end
   end
 
@@ -221,7 +221,7 @@ end
 ---@return boolean @Whether the area is clear and ruins can be spawned
 local function clear_area(half_size, center, surface)
   if debug_log then log(string.format("[clear_area]: half_size[]='%s',center[]='%s',surface[]='%s' - CALLED!", type(half_size), type(center), type(surface))) end
-  local area = util.area_from_center_and_half_size(half_size, center)
+  local area = utils.area_from_center_and_half_size(half_size, center)
 
   -- exclude tiles that we shouldn't spawn on
   if surface.count_tiles_filtered{ area = area, limit = 1, collision_mask = { item = true, object = true, water_tile = true } } == 1 then
