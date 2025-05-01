@@ -47,7 +47,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
   if debug_log then log(string.format("[spawn_entity]: entity_name='%s',entity.name='%s'", entity_name, entity.name)) end
 
   if not prototypes[entity_name] then
-    log(string.format("[spawn_entity]: entity '%s' does not exist!", entity_name)) end
+    log(string.format("[spawn_entity]: entity '%s' does not exist!", entity_name))
     return
   end
 
