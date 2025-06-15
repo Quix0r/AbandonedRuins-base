@@ -145,7 +145,7 @@ local function try_ruin_spawn(size, min_distance, center, surface, tick)
 
   queue_ruin(tick, {size = size, center = center, surface = surface})
 
-  if debug_log then log("[on_chunk_generated]: EXIT!") end
+  if debug_log then log("[try_ruin_spawn]: EXIT!") end
 end
 
 script.on_event(defines.events.on_chunk_generated,
