@@ -9,7 +9,7 @@ local spawning = {}
 local function no_corpse_fade(half_size, center, surface)
   if debug_log then log(string.format("[no_corpse_fade]: half_size=%d,center[]='%s',surface[]='%s' - CALLED!", half_size, type(center), type(surface))) end
   if half_size <= 0 or not center or not surface then return end
-  assert(surface.valid, string.format("[spawn_entities]: surface.name='%s' is not valid", surface.name))
+  assert(surface.valid, string.format("[no_corpse_fade]: surface.name='%s' is not valid", surface.name))
 
   local area = utils.area_from_center_and_half_size(half_size, center)
   if debug_log then log(string.format("[no_corpse_fade]: area[]='%s',surface.name='%s'", type(area), surface.name)) end
@@ -19,7 +19,7 @@ local function no_corpse_fade(half_size, center, surface)
     entity.corpse_expires = false
   end
 
-  if debug_log then log("[spawn_entities]: EXIT!") end
+  if debug_log then log("[no_corpse_fade]: EXIT!") end
 end
 
 ---@param entity EntityExpression|string
@@ -254,7 +254,7 @@ spawning.spawn_ruin = function(ruin, half_size, center, surface)
     return
   end
 
-  assert(surface.valid, string.format("surface.name='%s' is not valid", surface.name))
+  assert(surface.valid, string.format("[spawn_ruin]: surface.name='%s' is not valid", surface.name))
 
   if clear_area(half_size, center, surface) then
     local variables = parse_variables(ruin.variables)
@@ -284,7 +284,7 @@ spawning.spawn_random_ruin = function(ruins, half_size, center, surface)
     error("Array 'ruins' is empty")
   end
 
-  assert(surface.valid, string.format("surface.name='%s' is not valid", surface.name))
+  assert(surface.valid, string.format("[spawn_random_ruin]: surface.name='%s' is not valid", surface.name))
 
   --spawn a random ruin from the list
   spawning.spawn_ruin(ruins[math.random(#ruins)], half_size, center, surface)
