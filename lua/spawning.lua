@@ -42,6 +42,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
       type(prototypes)
     ))
   end
+  assert(surface.valid, string.format("[spawn_entity]: surface.name='%s' is not valid", surface.name))
 
   local entity_name = expressions.entity(entity, vars)
   if debug_log then log(string.format("[spawn_entity]: entity_name='%s',entity.name='%s'", entity_name, entity.name)) end
@@ -222,6 +223,7 @@ end
 local function clear_area(half_size, center, surface)
   if debug_log then log(string.format("[clear_area]: half_size[]='%s',center[]='%s',surface[]='%s' - CALLED!", type(half_size), type(center), type(surface))) end
   local area = utils.area_from_center_and_half_size(half_size, center)
+  assert(surface.valid, string.format("[clear_area]: surface.name='%s' is not valid", surface.name))
 
   -- exclude tiles that we shouldn't spawn on
   if surface.count_tiles_filtered{ area = area, limit = 1, collision_mask = { item = true, object = true, water_tile = true } } == 1 then
