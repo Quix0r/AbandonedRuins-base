@@ -13,24 +13,31 @@ local ruin_sets = {
 local on_entity_force_changed_event = script.generate_event_name()
 
 local function spawn_chances()
+  if debug_on_tick then log("[spawn_chances]: CALLED!") end
+
   local smallChance  = settings.global["ruins-small-ruin-chance"].value
   local mediumChance = settings.global["ruins-medium-ruin-chance"].value
   local largeChance  = settings.global["ruins-large-ruin-chance"].value
+  if debug_on_tick then log(string.format("[spawn_chances]: smallChance=%.0f,mediumChance=%.0f,largeChance=%.0f", smallChance, mediumChance, largeChance)) end
 
   local sumChance = smallChance + mediumChance + largeChance
   local totalChance = math.min(sumChance, 1)
+  if debug_on_tick then log(string.format("[spawn_chances]: sumChance=%.0f,totalChance=%.0f", sumChance, totalChance)) end
 
   -- now compute cumulative distribution of conditional probabilities for
   -- spawn_type given a spawn occurs.
   local smallThreshold  = smallChance  / sumChance * totalChance
   local mediumThreshold = mediumChance / sumChance * totalChance + smallThreshold
   local largeThreshold  = largeChance  / sumChance * totalChance + mediumThreshold
+  if debug_on_tick then log(string.format("[spawn_chances]: smallThreshold=%.0f,mediumThreshold=%.0f,largeThreshold=%.0f", smallThreshold, mediumThreshold, largeThreshold)) end
 
-  storage.spawn_table = {
+  storage.spawn_changes = {
     small  = smallThreshold,
     medium = mediumThreshold,
     large  = largeThreshold
   }
+
+  if debug_on_tick then log("[spawn_chances]: EXIT!") end
 end
 
 local function init()
@@ -48,11 +55,6 @@ local function init()
       ["Factory floor"] = true, -- factorissimo
       ["ControlRoom"]   = true -- mobile factory
     }
-    if script.active_mods["space-age"] then
-      -- @todo Fulgora has heavy oil seas, Vulcanus lava "seas", currently not detected as "water"
-      --storage.excluded_surfaces["fulgora"]  = true
-      --storage.excluded_surfaces["vulcanus"] = true
-    end
   end
 end
 
@@ -162,12 +164,16 @@ script.on_event(defines.events.on_chunk_generated,
     local center       = util.get_center_of_chunk(event.position)
     local min_distance = settings.global["ruins-min-distance-from-spawn"].value
     local spawn_chance = math.random()
+    if debug_log then log(string.format("[on_chunk_generated]: center.x=%d,center.y=%d,min_distance=%d,spawn_chance=%0.f", center.x, center.y, min_distance, spawn_chance)) end
 
-    if spawn_chance <= storage.spawn_table["small"] then
+    if spawn_chance <= storage.spawn_changes["small"] then
+      if debug_log then log(string.format("[on_chunk_generated]: Trying to spawn small ruin at event.surface='%s' ...", event.surface)) end
       try_ruin_spawn("small", min_distance, center, event.surface, event.tick)
-    elseif spawn_chance <= storage.spawn_table["medium"] then
+    elseif spawn_chance <= storage.spawn_changes["medium"] then
+      if debug_log then log(string.format("[on_chunk_generated]: Trying to spawn medium ruin at event.surface='%s' ...", event.surface)) end
       try_ruin_spawn("medium", min_distance, center, event.surface, event.tick)
-    elseif spawn_chance <= storage.spawn_table["large"] then
+    elseif spawn_chance <= storage.spawn_changes["large"] then
+      if debug_log then log(string.format("[on_chunk_generated]: Trying to spawn large ruin at event.surface='%s' ...", event.surface)) end
       try_ruin_spawn("large", min_distance, center, event.surface, event.tick)
     end
 
@@ -242,6 +248,9 @@ remote.add_interface("AbandonedRuins",
     assert(type(name) == "string",
       "Remote call parameter to exclude_surface for AbandonedRuins must be a string value."
     )
+    assert(not storage.excluded_surfaces[name],
+      string.format("Surface '%s' is already added as excluded surface.", name)
+    )
     storage.excluded_surfaces[name] = true
   end,
 
@@ -250,6 +259,9 @@ remote.add_interface("AbandonedRuins",
   reinclude_surface = function(name)
     assert(type(name) == "string",
       "Remote call parameter to reinclude_surface for AbandonedRuins must be a string value."
+    )
+    assert(storage.excluded_surfaces[name],
+      string.format("Surface '%s' is already an included surface.", name)
     )
     storage.excluded_surfaces[name] = nil
   end,
@@ -265,6 +277,9 @@ remote.add_interface("AbandonedRuins",
   add_ruin_set = function(name, small_ruins, medium_ruins, large_ruins)
     assert(type(name) == "string",
       "Remote call parameter to add_ruin_set for AbandonedRuins must be a string value."
+    )
+    assert(not ruin_sets[name],
+      string.format("Ruin-set '%s' is already added.", name)
     )
     assert(small_ruins and next(small_ruins))
     assert(medium_ruins and next(medium_ruins))
@@ -284,6 +299,9 @@ remote.add_interface("AbandonedRuins",
   get_ruin_set = function(name)
     assert(type(name) == "string",
       "Remote call parameter to get_ruin_set for AbandonedRuins must be a string value."
+    )
+    assert(ruin_sets[name],
+      string.format("Ruin-set '%s' is not found.", name)
     )
     return ruin_sets[name]
   end,

@@ -1,14 +1,14 @@
 {
   "name": "AbandonedRuins20",
-  "version": "1.2.11",
+  "version": "1.2.12",
   "title": "The Ruins Mod 2.0",
-  "author": "Silly_Warlock, roland77, Gangsir, Bilka",
+  "author": "roland77, Silly_Warlock, Gangsir, Bilka",
   "homepage": "https://mods.factorio.com/mod/AbandonedRuins20",
   "factorio_version": "2.0",
   "description": "This mod is based on 1.1.6 (abondoned mod?) and contains many fixes for Factorio 2.0. The Ruins Mod adds randomly spawns ruins in the world. These ruins are destroyed fragments of bases, forts, small oases, and more.\n\nExplore them for loot, adventure, or entertainment, but beware, some still have running defenses from the last player that landed on the planet, with more successful colonies having better defenses.",
   "dependencies":
   [
-    "base >= 2.0.43",
+    "base >= 2.0.60",
     "?space-age",
     "!AbandonedRuins"
   ],

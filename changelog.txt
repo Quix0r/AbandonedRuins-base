@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.12
+Date: 2025-07-18
+  Changes:
+    - renamed `spawn_table` to `spawn_chances` as tables are tables already and
+      `spawn_changes` is more descriptive
+    - added some more assertitions
+    - added some minor debug lines
+---------------------------------------------------------------------------------------------------
 Version: 1.2.11
 Date: 2025-06-07
   Fixed:
