@@ -1,6 +1,6 @@
 {
   "name": "AbandonedRuins20",
-  "version": "1.2.12",
+  "version": "1.2.13",
   "title": "The Ruins Mod 2.0",
   "author": "roland77, Silly_Warlock, Gangsir, Bilka",
   "homepage": "https://mods.factorio.com/mod/AbandonedRuins20",
@@ -10,7 +10,8 @@
   [
     "base >= 2.0.60",
     "?space-age",
-    "!AbandonedRuins"
+    "!AbandonedRuins",
+    "!AbandonedRuins_updated_fork"
   ],
   "package":
   { 
