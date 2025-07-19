@@ -29,12 +29,14 @@ Some extra care needs to be taken with ruin sets, as they are not save/loaded. T
 For that reason, it is recommended to only add ruin sets in on_init and on_load. Furthermore, it is recommended to not conditionally change ruin sets.
 
 ```lua
-local small_ruins = require("ruins/small") -- an array of ruins
-local medium_ruins = require("ruins/medium") -- an array of ruins
-local large_ruins = require("ruins/large") -- an array of ruins
+local ruins {
+  small  = require("ruins/small") -- an array of ruins
+  medium = require("ruins/medium") -- an array of ruins
+  large  = require("ruins/large") -- an array of ruins
+}
 
 local function make_ruin_set()
-  remote.call("AbandonedRuins", "add_ruin_set", "my-ruin-set", small_ruins, medium_ruins, large_ruins)
+  remote.call("AbandonedRuins", "add_ruin_sets", "my-ruin-set", ruins)
 end
 
 -- The ruin set is always created when the game is loaded, since the ruin sets are not save/loaded by AbandonedRuins.

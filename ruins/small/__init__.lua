@@ -103,7 +103,8 @@ for _, ruin in pairs({
 	"twinLasers",
 	"twinTurrets"
 }) do
-	table.insert(ruins, require("__AbandonedRuins20__/lua/ruins/small/" .. ruin))
+	if debug_log then log(string.format("Loading ruin='%s' ...", ruin)) end
+	table.insert(ruins, require(ruin))
 end
 
 return ruins

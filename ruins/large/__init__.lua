@@ -21,7 +21,8 @@ for _, ruin in pairs({
 	"walledOrchard",
 	"walledGrotto"
 }) do
-	table.insert(ruins, require("__AbandonedRuins20__/lua/ruins/large/" .. ruin))
+	if debug_log then log(string.format("Loading ruin='%s' ...", ruin)) end
+	table.insert(ruins, require(ruin))
 end
 
 return ruins

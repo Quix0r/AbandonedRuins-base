@@ -35,7 +35,8 @@ for _, ruin in pairs({
 	"uraniumMining",
 	"walledSolar"
 }) do
-	table.insert(ruins, require("__AbandonedRuins20__/lua/ruins/medium/" .. ruin))
+	if debug_log then log(string.format("Loading ruin='%s' ...", ruin)) end
+	table.insert(ruins, require(ruin))
 end
 
 return ruins

@@ -1,4 +1,6 @@
-# The Ruins Mod
+# The Ruins Mod - Base
+
+Adds base ruin set to [The Ruins Mod Updated](https://mods.factorio.com/mod/AbandonedRuins_updated_fork).
 
 *You weren't the first to come here... you won't be the last...*
 
@@ -17,3 +19,5 @@ Want to make your own ruin set?<br>
 Check out the links above, the [ruin set](docs/ruin_sets.md) documentation and [The Ruins Mod - Krastorio2](https://github.com/Bilka2/AbandonedRuins-Krastorio2) as an example mod.
 
 The remote interfaces that this mod provides are described with comments at the end of [control.lua](control.lua#L138).
+
+This mod also serves as an example for how to make a custom ruin set for "The Ruins Mod Updated". The documentation for ruin sets can be found within The Ruins Mod: https://github.com/Quix0r/AbandonedRuins-base/blob/master/docs/ruin_sets.md
