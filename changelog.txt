@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2025-07-20
+  Changes:
+    - reactivated ruin splitterI.lua (small) as the same crash happens in other ruin
+      with `random-belt`, too
+---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2025-07-20
   Changes:

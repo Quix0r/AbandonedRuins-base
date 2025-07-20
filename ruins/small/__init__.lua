@@ -1,7 +1,6 @@
 local ruins = {}
 
 -- Insert all ruins
-	--@todo "splitterI",
 for _, ruin in pairs({
 	"artyOutpost",
 	"artyOutpost2",
@@ -96,6 +95,7 @@ for _, ruin in pairs({
 	"solarAccu",
 	"solarAccu2",
 	"spidertronCorpse",
+	"splitterI",
 	"splitterI2",
 	"splitterI3",
 	"steamPower",
