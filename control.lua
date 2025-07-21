@@ -5,7 +5,7 @@ local ruin_set = require("ruins/ruin_set")
 debug_log = settings.global["ruins-enable-debug-log"].value
 
 local function make_ruin_set()
-  -- If your ruin set is the origin of other sets basing on yours:
+  -- If your ruin set is the origin of other sets aka. "stand-alone" mod:
   local new_ruins = ruin_set
 
   -- ------------ BEGIN ------------
