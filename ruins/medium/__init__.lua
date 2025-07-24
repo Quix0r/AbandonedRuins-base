@@ -1,7 +1,7 @@
 local ruins = {}
 
 -- Insert all ruins
-for _, ruin in pairs({
+for _, name in pairs({
 	"assemblingLine",
 	"carAssembly",
 	"carBelt",
@@ -35,8 +35,10 @@ for _, ruin in pairs({
 	"uraniumMining",
 	"walledSolar"
 }) do
-	if debug_log then log(string.format("Loading ruin='%s' ...", ruin)) end
-	table.insert(ruins, require(ruin))
+	if debug_log then log(string.format("Loading name='%s' ...", name)) end
+	local ruin = require(name)
+	ruin.name = name
+	table.insert(ruins, ruin)
 end
 
 return ruins

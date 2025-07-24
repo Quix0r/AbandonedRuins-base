@@ -1,6 +1,6 @@
 {
   "name": "AbandonedRuins-base",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "title": "Abandoned Ruins - Base",
   "author": "roland77, Keysivi, Gangsir, Bilka",
   "homepage": "https://github.com/Quix0r/AbandonedRuins-base",
@@ -9,7 +9,7 @@
   "dependencies":
   [
     "base >= 2.0.60",
-    "AbandonedRuins_updated_fork >= 1.3.2",
+    "AbandonedRuins_updated_fork >= 1.3.8",
     "?space-age"
   ],
   "package":

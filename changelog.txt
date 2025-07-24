@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2025-07-23
+  Features:
+    - added `allowed_surfaces` to some ruins which is a per-ruin table of surface names either
+      if they are allowed or explicitly not to spawn
+    - expanded documentation, also with new remote-call function `spawn_exclusively_on()` so
+      planets/moons can have their exclusive ruin-sets being randomly spawned
+  Bugfixes:
+    - renamed "rock-*" to "*-rock", e.g. "big-rock" is correct entity name, so more entities
+      will spawn (again)
+---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date 2025-07-22:
   Documentation:

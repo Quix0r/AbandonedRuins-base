@@ -1,8 +1,12 @@
 local base_util = require("__core__/lualib/util")
 local main = require("libs/main")
 
-local ruin_set = require("ruins/ruin_set")
+local RUINSET_NAME = "base"
+
+---@type boolean
 debug_log = settings.global["ruins-enable-debug-log"].value
+
+local ruin_set = require("ruins/ruin_set")
 
 local function make_ruin_set()
   -- If your ruin set is the origin of other sets aka. "stand-alone" mod:
@@ -10,7 +14,7 @@ local function make_ruin_set()
 
   -- ------------ BEGIN ------------
   -- If your ruin set mod expands an other ruin set:
-  --local new_ruins = remote.call("AbandonedRuins", "get_ruin_set", "base")
+  --local new_ruins = remote.call("AbandonedRuins", "get_ruin_set", RUINSET_NAME)
 
   -- Add custom base ruins to existing ruins.
   -- for size, ruins in pairs(ruin_set) do
@@ -34,7 +38,7 @@ local function make_ruin_set()
   -- end
 
   -- Provide an expanded and modified set of ruins as a “base” set. Or choose your ruin-set name here, e.g. "krastorio2"
-  remote.call("AbandonedRuins", "add_ruin_sets", "base", new_ruins)
+  remote.call("AbandonedRuins", "add_ruin_sets", RUINSET_NAME, new_ruins)
 end
 
 -- A ruin set is always created when loading the game, as ruin sets are not saved/loaded by AbandonedRuins.

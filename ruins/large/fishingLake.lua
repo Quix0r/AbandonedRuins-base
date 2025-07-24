@@ -768,5 +768,9 @@ return
     {"sand-1", {x = 14, y = -4}},
     {"sand-1", {x = 15, y = -6}},
     {"sand-1", {x = 15, y = -5}},
+  },
+  spawn_on_surfaces =
+  {
+    nauvis = true
   }
 }

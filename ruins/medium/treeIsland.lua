@@ -79,5 +79,9 @@ return
     {"water", {x = 4, y = 2}},
     {"water", {x = 4, y = 3}},
     {"water", {x = 4, y = 4}},
+  },
+  spawn_on_surfaces =
+  {
+    nauvis = true
   }
 }
