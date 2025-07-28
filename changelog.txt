@@ -11,7 +11,7 @@ Date: 2025-07-23
       will spawn (again)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
-Date 2025-07-22:
+Date: 2025-07-22
   Documentation:
     - added `format.md` from `AbandonedRuins_updated_fork` mod
     - added `CONTRIBUTION.md` for how to contribute ruins

@@ -4,7 +4,7 @@ Other mods can add their own ruin sets to *Abandoned Ruins - Updated* (aka. "cor
 
 ## Step 1: Ruin set setting
 
-The settings should be modified in `settings-updates.lua`. Make sure to set "AbandonedRuins >= 1.x.x" (this mod) as a dependency while x.x is the lastest middle.minor version.
+The settings should be modified in `settings-updates.lua`. Make sure to set "AbandonedRuins_updated_fork >= 1.x.x" as a dependency while `x.x` is the lastest middle.minor version.
 
 Add a ruin set name to the setting:
 ```lua
