@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2025-08-03
+  Bugfixes:
+    - all ruin-set mods must now register their name with the framework mod
+      `AbandonedRuins_updated_fork` before they can be selected, since "base" is no longer the
+      default, this mod also needs to register its name
+---------------------------------------------------------------------------------------------------
 Version: 0.1.0
 Date: 2025-07-23
   Features:
