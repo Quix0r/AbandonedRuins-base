@@ -1,3 +1,5 @@
+-- All ruins ordered by size
+---@type table<string, Ruin[]>
 local ruin_set = {}
 
 -- Load all ruin sets
