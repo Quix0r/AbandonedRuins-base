@@ -80,8 +80,8 @@ return
     {"water", {x = 4, y = 3}},
     {"water", {x = 4, y = 4}},
   },
-  spawn_on_surfaces =
+  no_spawning =
   {
-    nauvis = true
+    fulgora = true
   }
 }

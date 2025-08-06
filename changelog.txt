@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2025-08-06
+  Documentation:
+    - Updated `ruin_set.md` as there was no remote-call for registering your ruin-set possible,
+      only `utils.register_ruin_set()` is available
+    - added `no_spawning` (per ruin possible) and `no_spawning_on()` (remote-call, entire ruin-set)
+  Minor:
+    - added locales for "base" ruin-set name
+    - fixed version numbers, thanks to @Sgamez for reporting it
+    - bumped mandatory depency `AbandonedRuins_updated_fork` to latest minor 17
+---------------------------------------------------------------------------------------------------
 Version: 0.1.1
 Date: 2025-08-03
   Bugfixes:
@@ -17,7 +28,7 @@ Date: 2025-07-23
     - renamed "rock-*" to "*-rock", e.g. "big-rock" is correct entity name, so more entities
       will spawn (again)
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.6
+Version: 0.0.7
 Date: 2025-07-22
   Documentation:
     - added `format.md` from `AbandonedRuins_updated_fork` mod
@@ -26,35 +37,35 @@ Date: 2025-07-22
   Changes:
     - bumped version of `AbandonedRuins_updated_fork`
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.5
+Version: 0.0.6
 Date: 2025-07-20
   Changes:
     - reactivated ruin splitterI.lua (small) as the same crash happens in other ruin
       with `random-belt`, too
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.4
+Version: 0.0.5
 Date: 2025-07-20
   Changes:
     - deactivated ruin splitterI as `random-splitter` is not working ATM
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.3
+Version: 0.0.4
 Date: 2025-07-19
   Changes:
     - heavy rewrites from old unflexible/static system
     - moved `replace_*` functions to new `libs/main.lua` file
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.2
+Version: 0.0.3
 Date: 2025-04-14
   Changes:
     - Corrections made to control.lua
       Thanks to Severeniys for noticing the incorrect connection of large ruins
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.1
+Version: 0.0.2
 Date: 2024-12-19
   Changes:
     - All basic ruins are separated into a separate mod
 ---------------------------------------------------------------------------------------------------
-Version: 0.0.0
+Version: 0.0.1
 Date: 2021-01-27
   Changes:
     - Spawned fuel now respects the fuel overhaul setting.

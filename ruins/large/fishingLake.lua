@@ -769,8 +769,8 @@ return
     {"sand-1", {x = 15, y = -6}},
     {"sand-1", {x = 15, y = -5}},
   },
-  spawn_on_surfaces =
+  no_spawning =
   {
-    nauvis = true
+    fulgora = true
   }
 }
