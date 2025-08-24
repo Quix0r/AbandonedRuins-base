@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2025-08-24
+  Minor:
+    - bumped version number of `AbandonedRuins_updated_fork` to 1.4.0 which has introduced
+      breaking changes
+---------------------------------------------------------------------------------------------------
 Version: 0.1.2
 Date: 2025-08-06
   Documentation:
