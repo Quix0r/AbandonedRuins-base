@@ -32,6 +32,7 @@ return
   },
   no_spawning =
   {
-    fulgora = true
+    fulgora = true,
+    vulcanus = true
   }
 }
