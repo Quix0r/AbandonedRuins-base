@@ -1,11 +1,14 @@
 local base_util = require("__core__/lualib/util")
+local constants = require("__AbandonedRuins_updated_fork__/lua/constants")
 local main = require("libs/main")
 
+---@type string Set your ruin-set name here
 local RUINSET_NAME = "base"
 
 ---@type boolean
-debug_log = settings.global["ruins-enable-debug-log"].value
+debug_log = settings.global[constants.ENABLE_DEBUG_LOG_KEY].value
 
+---@type table<string,RuinSet[]>
 local ruin_set = require("ruins/ruin_set")
 
 local function make_ruin_set()
@@ -13,8 +16,8 @@ local function make_ruin_set()
   local new_ruins = ruin_set
 
   -- ------------ BEGIN ------------
-  -- If your ruin set mod expands an other ruin set:
-  --local new_ruins = remote.call("AbandonedRuins", "get_ruin_set", RUINSET_NAME)
+  -- If your ruin set mod expands an other ruin-set, e.g. "base":
+  --local new_ruins = remote.call("AbandonedRuins", "get_ruin_set", "base")
 
   -- Add custom base ruins to existing ruins.
   -- for size, ruins in pairs(ruin_set) do
