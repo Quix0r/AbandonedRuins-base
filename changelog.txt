@@ -2,7 +2,7 @@
 Version: 0.2.0
 Date: 2026-06-27
   Experimental:
-    - changed version of supported Factorio version to `2.1` as suggested by @pault-pg@github.com
+    - changed version of supported Factorio version to `2.1` as suggested by @tobiaspal
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.8
 Date: 2026-07-16
